@@ -7,8 +7,6 @@ ManzCreations CRM is a Customer Relationship Management application that helps b
 ### Prerequisites
 
 - Python 3.8 or later
-- PyQt5
-- Pandas
 - MySQL Server
 
 ### Setting Up MySQL
@@ -16,13 +14,15 @@ ManzCreations CRM is a Customer Relationship Management application that helps b
 1. Install MySQL Server on your system.
 2. Create a database for ManzCreations CRM:
    CREATE DATABASE manzCreations_crm;
-4. Import the ManzCreations CRM database schema (provided separately).
+3. Import the ManzCreations CRM database schema (provided separately).
 
 ### Setting Up Python
 
 1. Ensure Python is installed on your system.
-2. Install required Python packages:
-pip install PyQt5 pandas mysql-connector-python
+2. Clone the repository or download the project to your local machine.
+3. Navigate to the project directory.
+4. Install required Python packages using the `requirements.txt` file:
+pip install -r requirements.txt
 
 
 ### Creating an Executable from the Python Application
