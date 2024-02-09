@@ -1,7 +1,0 @@
-pandas~=2.1.2
-mysql~=0.0.3
-mysql-connector-python~=8.2.0
-Faker~=19.12.1
-numpy~=1.26.1
-PyQt5~=5.15.10
-matplotlib~=3.8.0
