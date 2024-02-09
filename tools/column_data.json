@@ -1,0 +1,72 @@
+{
+  "EMPLOYEE_HEADERS": {
+    "availability": "Availability",
+    "hired_date": "Hired Date",
+    "first_name": "First Name",
+    "last_name": "Last Name",
+    "email": "Email",
+    "phone": "Phone",
+    "address": "Address",
+    "city": "City",
+    "state": "State",
+    "zipcode": "Zipcode",
+    "job_id": "Job ID",
+    "id": "Database ID"
+  },
+  "CLIENT_HEADERS": {
+    "employer_company": "Employer Company",
+    "contact_person": "Contact Person",
+    "contact_phone": "Contact Phone",
+    "contact_email": "Contact Email",
+    "address": "Address",
+    "billing_allowance": "Billing Allowance",
+    "active_employees": "Active Employees",
+    "id": "Database ID"
+  },
+  "JOB_ORDER_HEADERS": {
+    "company": "Company",
+    "location": "Location",
+    "po_order_number": "PO Order Number",
+    "active_employees": "Active Employees",
+    "needed_employees": "Needed Employees",
+    "start_date": "Start Date",
+    "end_date": "End Date",
+    "id": "Database ID"
+  },
+  "OLD_EMPLOYEE_JOB_ORDER_HEADERS": {
+    "first_name": "First Name",
+    "last_name": "Last Name",
+    "hired_date": "Hired Date",
+    "pay": "Pay",
+    "pay_conversion": "Pay Rate",
+    "po_order_number": "PO Order Number",
+    "location": "Location",
+    "company": "Compnay",
+    "job_title": "Job Title",
+    "position_type": "Position Type",
+    "remote": "% Remote",
+    "id": "Database ID"
+  },
+  "OLD_COMPANY_JOB_ORDER_HEADERS": {
+    "employer_company": "Employer Company",
+    "contact_person": "Contact Person",
+    "location": "Location",
+    "po_order_number": "PO Order Number",
+    "start_date": "Start Date",
+    "end_date": "End Date",
+    "needed_employees": "Needed Employees",
+    "job_title": "Job Title",
+    "position_type": "Position Type",
+    "bill_rate_min": "Bill Rate (Min)",
+    "bill_rate_max": "Bill Rate (Max)",
+    "bill_rate_conversion": "Bill Rate",
+    "pay_rate": "Pay",
+    "pay_rate_conversion": "Pay Rate",
+    "min_experience": "Experience (Min)",
+    "requirements": "Requirements",
+    "remote": "% Remote",
+    "job_description_path": "Job Description Path",
+    "notes_path": "Notes Path",
+    "id": "Database ID"
+  }
+}
