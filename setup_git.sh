@@ -19,6 +19,6 @@ git commit -m "$COMMIT_MESSAGE"
 git remote add origin $REMOTE_URL
 
 # Push the commit to the GitHub repository
-git push -u origin main
+git push -u origin master
 
 echo "Repository setup completed."
