@@ -18,7 +18,10 @@ git commit -m "$COMMIT_MESSAGE"
 # Add the remote GitHub repository
 git remote add origin $REMOTE_URL
 
-# Push the commit to the GitHub repository
-git push -u origin master
+# Rename the local branch to 'main'
+git branch -m master main
+
+# Push the commit to the GitHub repository on the 'main' branch
+git push -u origin main
 
 echo "Repository setup completed."
