@@ -78,24 +78,19 @@ class CardTableWidget(QTableWidget):
 
     def onItemDoubleClicked(self, item):
         row = item.row()
-        employee_id_column = None
-
-        # Loop through the columns to find the hidden one (assumed to be employee_id)
-        for col in range(self.columnCount()):
-            if self.isColumnHidden(col):
-                employee_id_column = col
-                break
-
-        if employee_id_column is not None:
-            employee_id_item = self.item(row, employee_id_column)
-            if employee_id_item:
-                employee_id = int(employee_id_item.text())
-                employeeCard = EmployeeCard(employee_id)
-                employeeCard.exec_()
-            else:
-                QMessageBox.warning(self, "Error", "Employee ID not found for the selected row.")
-        else:
+        employee_id_column = next(
+            (col for col in range(self.columnCount()) if self.isColumnHidden(col)),
+            None,
+        )
+        if employee_id_column is None:
             QMessageBox.warning(self, "Error", "Employee ID column not found.")
+
+        elif employee_id_item := self.item(row, employee_id_column):
+            employee_id = int(employee_id_item.text())
+            employeeCard = EmployeeCard(employee_id)
+            employeeCard.exec_()
+        else:
+            QMessageBox.warning(self, "Error", "Employee ID not found for the selected row.")
 
     def onHeaderClicked(self, logicalIndex):
         """
@@ -154,8 +149,7 @@ class CardTableWidget(QTableWidget):
             maxWidth = fontMetrics.width(self.horizontalHeaderItem(column).text()) + 50  # Adding some padding
 
             for row in range(self.rowCount()):
-                item = self.item(row, column)
-                if item:  # Check if item is not None
+                if item := self.item(row, column):
                     itemWidth = fontMetrics.width(item.text()) + 50  # Again, adding some padding
                     maxWidth = max(maxWidth, itemWidth)
 
@@ -259,8 +253,7 @@ class RankingEmployeeResultsDialog(QDialog):
 
     def populateJobOrders(self):
         query = "SELECT job_description_path, job_title, po_order_number FROM job_orders"
-        results = execute_query(query, fetch_mode='all')
-        if results:
+        if results := execute_query(query, fetch_mode='all'):
             for job_description_path, job_title, po_order_number in results:
                 combo_box_string = f"{job_title}-{po_order_number}"
                 self.jobComboBox.addItem(combo_box_string)
@@ -404,10 +397,13 @@ class RankingEmployeeResultsDialog(QDialog):
         vectorizer = TfidfVectorizer()
         tfidf_matrix = vectorizer.fit_transform(texts)
 
-        cosine_similarities = cosine_similarity(tfidf_matrix[0:1], tfidf_matrix[1:])
+        cosine_similarities = cosine_similarity(tfidf_matrix[:1], tfidf_matrix[1:])
         similarity_scores = cosine_similarities.flatten()
-        rankings = sorted([(employee_id, score) for employee_id, score in zip(employee_data, similarity_scores)],
-                          key=lambda x: x[1], reverse=True)
+        rankings = sorted(
+            list(zip(employee_data, similarity_scores)),
+            key=lambda x: x[1],
+            reverse=True,
+        )
 
         self.table.populateTable(rankings)
 

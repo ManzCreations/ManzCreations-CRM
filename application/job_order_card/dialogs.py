@@ -180,18 +180,19 @@ class EditCompanyDialog(QDialog):
                 continue
 
             if key == 'bill_rate':
-                # Check and parse bill rate for both $/hr and $/yr
-                bill_rate_match = re.match(r'^(\d+(\.\d+)?)\s*-\s*(\d+(\.\d+)?)\s*(\$\/hr|\$\/yr)$', text_value)
-                if bill_rate_match:
+                if bill_rate_match := re.match(
+                    r'^(\d+(\.\d+)?)\s*-\s*(\d+(\.\d+)?)\s*(\$\/hr|\$\/yr)$',
+                    text_value,
+                ):
                     updated_data['bill_rate_min'] = bill_rate_match.group(1)
                     updated_data['bill_rate_max'] = bill_rate_match.group(3)
                     updated_data['bill_rate_conversion'] = bill_rate_match.group(5)
                 else:
                     error_messages.append("Bill rate must be in the form 'float - float $/hr or $/yr'.")
             elif key == 'pay_rate':
-                # Check and parse pay rate for both $/hr and $/yr
-                pay_rate_match = re.match(r'^(\d+(\.\d+)?)\s*(\$\/hr|\$\/yr)$', text_value)
-                if pay_rate_match:
+                if pay_rate_match := re.match(
+                    r'^(\d+(\.\d+)?)\s*(\$\/hr|\$\/yr)$', text_value
+                ):
                     updated_data['pay_rate'] = pay_rate_match.group(1)
                     updated_data['pay_conversion'] = pay_rate_match.group(2)
                 else:

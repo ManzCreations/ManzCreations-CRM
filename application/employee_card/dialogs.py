@@ -122,9 +122,9 @@ class EditEmployeeDialog(QDialog):
             list: A list containing the address, city, state, and zipcode. If the address does not match the expected
             format, returns the original address and empty strings for the other components.
         """
-        # Use regex to split address into components
-        match = re.match(r'^(.*),\s*([^,]+),\s*([A-Z]{2})\s*(\d{5})$', address)
-        if match:
+        if match := re.match(
+            r'^(.*),\s*([^,]+),\s*([A-Z]{2})\s*(\d{5})$', address
+        ):
             return [match.group(1), match.group(2), match.group(3), match.group(4)]
         else:
             # Fallback if address does not match expected format
@@ -465,8 +465,7 @@ class ManageJobOrderDialog(QDialog):
         layout.addWidget(QLabel("Job Title:"))
         self.jobComboBox = QComboBox()
         self.jobComboBox.setEditable(True)
-        job_titles = self.fetch_job_titles()
-        if job_titles:
+        if job_titles := self.fetch_job_titles():
             self.jobComboBox.setCompleter(QCompleter(job_titles))
             self.jobComboBox.addItems(job_titles)
         layout.addWidget(self.jobComboBox)
@@ -568,8 +567,7 @@ class ManageJobOrderDialog(QDialog):
         selected_title = self.jobComboBox.currentText()
         job_title, po_order_number = selected_title.split(" - ", 1) if " - " in selected_title else (None, None)
         if job_title and po_order_number:
-            jobData = self.get_job_data(job_title, po_order_number)
-            if jobData:
+            if jobData := self.get_job_data(job_title, po_order_number):
                 # Now, update the UI with this jobData
                 self.update_job_info(self.possibleJobDataLayout, jobData=jobData)
                 self.jobData = jobData
@@ -624,11 +622,10 @@ class ManageJobOrderDialog(QDialog):
         return True
 
     def validate_pay(self, pay_rate):
-        if not pay_rate:
-            QMessageBox.warning(self, "Pay Rate Missing", "Pay rate cannot be empty. Please enter a value.")
-            return False
-        else:
+        if pay_rate:
             return True
+        QMessageBox.warning(self, "Pay Rate Missing", "Pay rate cannot be empty. Please enter a value.")
+        return False
 
     def performAddAction(self, employee_id):
         if not self.check_employee_id(employee_id):

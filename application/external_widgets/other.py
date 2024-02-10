@@ -50,8 +50,7 @@ class TableWidget(QTableWidget):
             maxWidth = fontMetrics.width(self.horizontalHeaderItem(column).text()) + 50  # Adding some padding
 
             for row in range(self.rowCount()):
-                item = self.item(row, column)
-                if item:  # Check if item is not None
+                if item := self.item(row, column):
                     itemWidth = fontMetrics.width(item.text()) + 50  # Again, adding some padding
                     maxWidth = max(maxWidth, itemWidth)
 
@@ -121,8 +120,7 @@ class TableWidget(QTableWidget):
             else:
                 # For non-editable columns, ensure the flag for editing is not set
                 for row in range(rowCount):
-                    item = self.item(row, column)
-                    if item:
+                    if item := self.item(row, column):
                         item.setFlags(item.flags() & ~Qt.ItemIsEditable)
 
         self.isRecordingChanges = True
@@ -173,9 +171,7 @@ class TableWidget(QTableWidget):
     def getId(_id, input_id, output_id):
         query = f"SELECT {output_id} FROM job2employer_ids WHERE {input_id} = %s;"
         data = (_id,)
-        result = execute_query(query, data, fetch_mode='one')
-
-        if result:
+        if result := execute_query(query, data, fetch_mode='one'):
             return result[0]
         else:
             # Handle the case where the query encountered an error
@@ -183,24 +179,22 @@ class TableWidget(QTableWidget):
 
     @staticmethod
     def getAllJobIds(_id):
-        company_name_query = f"SELECT employer_company FROM clients WHERE id = %s"
+        company_name_query = "SELECT employer_company FROM clients WHERE id = %s"
         company_name = execute_query(company_name_query, (_id,))
-        query = f"SELECT id FROM job_orders WHERE company = %s"
-        result = execute_query(query, company_name, fetch_mode="all")
-
-        if result:
+        query = "SELECT id FROM job_orders WHERE company = %s"
+        if result := execute_query(query, company_name, fetch_mode="all"):
             return result
         else:
             return None
 
     @staticmethod
     def openClientCard(job_id):
-        query = f"SELECT company FROM job_orders WHERE id = %s"
+        query = "SELECT company FROM job_orders WHERE id = %s"
         company_name = execute_query(query, (job_id,), fetch_mode="one")
-        query = f"SELECT id FROM clients WHERE employer_company = %s"
+        query = "SELECT id FROM clients WHERE employer_company = %s"
         employer_id = execute_query(query, company_name, fetch_mode="one")
         employer_id = employer_id[0]
-        query = f"SELECT id FROM job_orders WHERE company = %s"
+        query = "SELECT id FROM job_orders WHERE company = %s"
         allJobIds = execute_query(query, company_name, fetch_mode="all")
 
         clientCard = ClientCard(employer_id, allJobIds)

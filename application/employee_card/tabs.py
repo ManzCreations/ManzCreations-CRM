@@ -94,8 +94,7 @@ class CardTableWidget(QTableWidget):
             maxWidth = fontMetrics.width(self.horizontalHeaderItem(column).text()) + 50  # Adding some padding
 
             for row in range(self.rowCount()):
-                item = self.item(row, column)
-                if item:  # Check if item is not None
+                if item := self.item(row, column):
                     itemWidth = fontMetrics.width(item.text()) + 50  # Again, adding some padding
                     maxWidth = max(maxWidth, itemWidth)
 
@@ -268,16 +267,17 @@ class GeneralDataTab(QWidget):
         # Load the JSON schema for the table
         table_schemas = load_json_file(Path('tools/table_schemas.json'))
         if table_name in table_schemas:
-            # Extract just the column names from the SQL definition
-            columns = [line.split()[0] for line in table_schemas[table_name] if line.upper().startswith('    ')]
-            return columns
+            return [
+                line.split()[0]
+                for line in table_schemas[table_name]
+                if line.upper().startswith('    ')
+            ]
         return []
 
     @staticmethod
     def get_actual_columns_from_db(table_name):
         query = "SHOW COLUMNS FROM " + table_name
-        result = execute_query(query, fetch_mode="all", skip_SELECT=True)
-        if result:
+        if result := execute_query(query, fetch_mode="all", skip_SELECT=True):
             # The column name is the first item in each tuple returned
             return [column[0] for column in result]
         return []
@@ -288,8 +288,7 @@ class GeneralDataTab(QWidget):
         for column in self.extra_columns:
             # Fetch the data for the extra column for the given employee
             query = f"SELECT {column} FROM employees WHERE id = %s"
-            result = execute_query(query, (employee_id,), fetch_mode="one")
-            if result:
+            if result := execute_query(query, (employee_id,), fetch_mode="one"):
                 # Display the extra data
                 self.addDataRow(formLayout, column.replace('_', ' ').title() + ":", column, None, {column: result[0]},
                                 titleFont, dataFont)
@@ -318,15 +317,10 @@ class CompanyDataTab(QWidget):
         dataFont = QFont("Arial", 10)
 
         # Check if the employee ID is provided and not None
-        if self.employer_id is not None:
-            # If a current job ID is found, fetch company data
-            if self.job_id:
-                company_data = self.get_company_data(self.employer_id)
-            else:
-                company_data = {}
+        if self.employer_id is not None and self.job_id:
+            company_data = self.get_company_data(self.employer_id)
         else:
             company_data = {}
-
         # Create the title label
         titleLabel = QLabel("<h2 style='color: #64bfd1;'>Company Information</h2>")
         titleLabel.setAlignment(Qt.AlignLeft)
@@ -406,12 +400,10 @@ class CompanyDataTab(QWidget):
 
     @staticmethod
     def getAllJobIds(_id):
-        company_name_query = f"SELECT employer_company FROM clients WHERE id = %s"
+        company_name_query = "SELECT employer_company FROM clients WHERE id = %s"
         company_name = execute_query(company_name_query, (_id,))
-        query = f"SELECT id FROM job_orders WHERE company = %s"
-        result = execute_query(query, company_name, fetch_mode="all")
-
-        if result:
+        query = "SELECT id FROM job_orders WHERE company = %s"
+        if result := execute_query(query, company_name, fetch_mode="all"):
             return result
         else:
             return None
@@ -644,11 +636,7 @@ class JobOrderDataTab(QWidget):
             wrapText (bool): Whether to enable word wrapping for the value.
         """
         # Create a horizontal layout for the label-value pair
-        if HBox:
-            rowLayout = QHBoxLayout()
-        else:
-            rowLayout = QVBoxLayout()
-
+        rowLayout = QHBoxLayout() if HBox else QVBoxLayout()
         # Label widget
         labelWidget = QLabel(f"{labelText}")
         labelWidget.setFont(QFont("Arial", 10, QFont.Bold))
@@ -763,8 +751,7 @@ class OldJobOrdersTab(QWidget):
     def fetch_employee_name(self):
         # Fetch the first and last name of the employee from the employees table
         query = "SELECT first_name, last_name FROM employees WHERE id = %s"
-        result = execute_query(query, (self.employee_id,), fetch_mode="one")
-        if result:
+        if result := execute_query(query, (self.employee_id,), fetch_mode="one"):
             # Directly return the tuple assuming the first element is first_name and the second is last_name
             return result
         return "Unknown", "Unknown"
@@ -779,8 +766,7 @@ class OldJobOrdersTab(QWidget):
         results = execute_query(query, (self.employee_first_name, self.employee_last_name), fetch_mode="all")
         columns = ["Hired Date", "Pay", "Pay Rate", "PO Order Number", "Location", "Company", "Job Title",
                    "Position Type", "Remote (%)"]
-        job_orders = [dict(zip(columns, result)) for result in results]
-        return job_orders
+        return [dict(zip(columns, result)) for result in results]
 
     def updateButtonStyle(self, sender):
         """
