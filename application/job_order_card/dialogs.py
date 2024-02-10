@@ -1,9 +1,9 @@
 import re
 
 from PyQt5.QtCore import QTimer, pyqtSignal, pyqtSlot, QDate
-from PyQt5.QtGui import QTextDocument, QIcon
+from PyQt5.QtGui import QTextDocument
 
-from tools.helpful_functions import *
+from resources.tools.helpful_functions import *
 
 
 class EditCompanyDialog(QDialog):

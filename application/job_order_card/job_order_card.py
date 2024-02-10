@@ -1,10 +1,9 @@
 from PyQt5.QtCore import Qt, pyqtSignal
-from PyQt5.QtGui import QFont, QPixmap, QColor, QIcon
+from PyQt5.QtGui import QFont, QPixmap, QColor
 from PyQt5.QtWidgets import QHBoxLayout, QLabel, QApplication, QVBoxLayout, QListWidgetItem
 
-from tools.job_order_card.dialogs import EditCompanyDialog, AddFieldDialog
-from tools.mydb import *
-from tools.helpful_functions import *
+from application.job_order_card.dialogs import EditCompanyDialog, AddFieldDialog
+from resources.tools.helpful_functions import *
 
 
 class JobOrderCard(QDialog):

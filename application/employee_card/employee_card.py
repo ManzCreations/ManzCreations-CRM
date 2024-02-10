@@ -1,9 +1,8 @@
-from PyQt5.QtGui import QTransform, QFont, QPixmap, QIcon
-from PyQt5.QtCore import pyqtSignal, Qt
+from PyQt5.QtGui import QFont, QPixmap
+from PyQt5.QtCore import Qt
 
-from tools.employee_card.tabs import GeneralDataTab, CompanyDataTab, JobOrderDataTab, OldJobOrdersTab
-from tools.helpful_functions import *
-from tools.mydb import *
+from application.employee_card.tabs import GeneralDataTab, CompanyDataTab, JobOrderDataTab, OldJobOrdersTab
+from resources.tools.mydb import *
 
 
 class EmployeeCard(QDialog):

@@ -1,7 +1,7 @@
 from PyQt5.QtCore import QTimer, pyqtSignal
 from PyQt5.QtGui import QTextDocument
 
-from tools.helpful_functions import *
+from resources.tools.helpful_functions import *
 
 
 class EditCompanyDialog(QDialog):

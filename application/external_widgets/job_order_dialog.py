@@ -1,10 +1,10 @@
 from decimal import Decimal
 
 from PyQt5.QtCore import QRegExp, QDate, QPoint, Qt
-from PyQt5.QtGui import QRegExpValidator, QKeyEvent, QIcon
+from PyQt5.QtGui import QRegExpValidator, QKeyEvent
 
-from tools.helpful_functions import *
-from tools.mydb import *
+from resources.tools.helpful_functions import *
+from resources.tools.mydb import *
 
 
 class AddNoteButton(QPushButton):

@@ -1,11 +1,11 @@
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QFontMetrics, QIcon
+from PyQt5.QtGui import QFontMetrics
 from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem, QApplication, QMenu, QAction
 
-from tools.company_card.company_card import ClientCard
-from tools.employee_card.employee_card import EmployeeCard
-from tools.job_order_card.job_order_card import JobOrderCard
-from tools.mydb import *
+from application.company_card.company_card import ClientCard
+from application.employee_card.employee_card import EmployeeCard
+from application.job_order_card.job_order_card import JobOrderCard
+from resources.tools.mydb import *
 
 
 class TableWidget(QTableWidget):

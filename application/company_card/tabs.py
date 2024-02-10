@@ -4,12 +4,12 @@ from datetime import datetime
 
 import pandas as pd
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QIcon, QFontMetrics, QFont
+from PyQt5.QtGui import QFontMetrics, QFont
 from PyQt5.QtWidgets import QTableWidgetItem, QHeaderView, QMenu, QAction, QApplication
 
-from tools.company_card.dialogs import EditCompanyDialog, AddFieldDialog
-from tools.job_order_card.job_order_card import JobOrderCard
-from tools.mydb import *
+from application.company_card.dialogs import EditCompanyDialog, AddFieldDialog
+from application.job_order_card.job_order_card import JobOrderCard
+from resources.tools.mydb import *
 
 
 class CardTableWidget(QTableWidget):

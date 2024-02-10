@@ -1,7 +1,7 @@
 from PyQt5.QtCore import QRegExp
-from PyQt5.QtGui import QRegExpValidator, QIcon
+from PyQt5.QtGui import QRegExpValidator
 
-from tools.mydb import *
+from resources.tools.mydb import *
 
 
 class AddClientDialog(QDialog):

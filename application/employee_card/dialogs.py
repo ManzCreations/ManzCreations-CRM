@@ -4,7 +4,7 @@ import re
 from PyQt5.QtCore import QTimer, pyqtSignal, QDate
 from PyQt5.QtGui import QFont, QTextDocument
 
-from tools.helpful_functions import *
+from resources.tools.helpful_functions import *
 
 
 class EditEmployeeDialog(QDialog):

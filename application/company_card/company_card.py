@@ -1,10 +1,9 @@
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QFont, QPixmap, QIcon
+from PyQt5.QtGui import QFont, QPixmap
 from PyQt5.QtWidgets import QHBoxLayout, QLabel, QTabWidget, QApplication, QVBoxLayout
 
-from tools.company_card.tabs import CompanyInformationTab, CurrentJobOrdersTab, OldCompanyJobOrdersTab
-from tools.helpful_functions import *
-from tools.mydb import *
+from application.company_card.tabs import CompanyInformationTab, CurrentJobOrdersTab, OldCompanyJobOrdersTab
+from resources.tools.mydb import *
 
 
 class ClientCard(QDialog):

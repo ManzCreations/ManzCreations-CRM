@@ -7,7 +7,7 @@ import docx
 import fitz  # PyMuPDF
 from PyQt5.QtWidgets import QMessageBox
 
-from tools.mydb import *
+from resources.tools.mydb import *
 
 
 def show_error_message(message: str) -> None:

@@ -1,17 +1,16 @@
-import os
 import sys
 from datetime import datetime
 
 import pandas as pd
 from PyQt5.QtCore import pyqtSignal, Qt
-from PyQt5.QtGui import QFont, QIcon, QFontMetrics
+from PyQt5.QtGui import QFont, QFontMetrics
 from PyQt5.QtWidgets import QTableWidgetItem, QHeaderView, QMenu, QAction, QApplication
 
-from tools.company_card.company_card import ClientCard
-from tools.employee_card.dialogs import EditEmployeeDialog, AddFieldDialog, ManageJobOrderDialog
-from tools.helpful_functions import *
-from tools.job_order_card.job_order_card import JobOrderCard
-from tools.mydb import *
+from application.company_card.company_card import ClientCard
+from application.employee_card.dialogs import EditEmployeeDialog, AddFieldDialog, ManageJobOrderDialog
+from resources.tools.helpful_functions import *
+from application.job_order_card.job_order_card import JobOrderCard
+from resources.tools.mydb import *
 
 
 class CardTableWidget(QTableWidget):

@@ -1,21 +1,20 @@
 import locale
-import os
 import sys
 from datetime import datetime, timedelta
 
 import pandas as pd
 from PyQt5.QtCore import Qt, QSize
-from PyQt5.QtGui import QFont, QIcon
+from PyQt5.QtGui import QFont
 
-from tools.employee_card.employee_card import EmployeeCard
-from tools.external_widgets.add_client import AddClientDialog
-from tools.external_widgets.add_employee import AddEmployeeDialog
-from tools.external_widgets.job_order_dialog import JobOrderPage
-from tools.external_widgets.other import TableWidget, getDatabaseInfo
-from tools.finder_agent.find_employees import RankingEmployeeResultsDialog
-from tools.finder_agent.find_job_orders import RankingJobOrderResultsDialog
-from tools.helpful_functions import *
-from tools.mydb import *
+from application.employee_card.employee_card import EmployeeCard
+from application.external_widgets.add_client import AddClientDialog
+from application.external_widgets.add_employee import AddEmployeeDialog
+from application.external_widgets.job_order_dialog import JobOrderPage
+from application.external_widgets.other import TableWidget, getDatabaseInfo
+from application.finder_agent.find_employees import RankingEmployeeResultsDialog
+from application.finder_agent.find_job_orders import RankingJobOrderResultsDialog
+from resources.tools.helpful_functions import *
+from resources.tools.mydb import *
 
 locale.setlocale(locale.LC_ALL, '')  # Set to the user's default locale
 
@@ -26,7 +25,7 @@ locale.setlocale(locale.LC_ALL, '')  # Set to the user's default locale
 
 ###################################
 # Column Headers
-column_data_path = Path('tools/column_data.json')
+column_data_path = Path('../resources/tools/column_data.json')
 HEADERS = load_json_file(column_data_path, "Column Data JSON file")
 
 
@@ -66,13 +65,13 @@ class EmployeePage(QWidget):
 
         # Optional: Add an image to the header
         self.headerIcon = QLabel()
-        self.headerIcon.setPixmap(QIcon('example.png').pixmap(50, 50))
+        self.headerIcon.setPixmap(QIcon('../resources/example.png').pixmap(50, 50))
         self.headerLayout.addWidget(self.headerIcon)
 
         # Refresh Table Button
         self.refreshTableButton = QPushButton()
         buttonHeight = self.refreshTableButton.sizeHint().height()
-        self.refreshTableButton.setIcon(QIcon("icons/iconmonstr-refresh-lined.svg"))
+        self.refreshTableButton.setIcon(QIcon("../resources/icons/iconmonstr-refresh-lined.svg"))
         self.refreshTableButton.setIconSize(QSize(buttonHeight, buttonHeight))
         self.refreshTableButton.clicked.connect(self.populateTable)
         self.headerLayout.addWidget(self.refreshTableButton)
@@ -523,13 +522,13 @@ class ClientPage(QWidget):
 
         # Optional: Add an image to the header
         self.headerIcon = QLabel()
-        self.headerIcon.setPixmap(QIcon('example.png').pixmap(50, 50))
+        self.headerIcon.setPixmap(QIcon('../resources/example.png').pixmap(50, 50))
         self.headerLayout.addWidget(self.headerIcon)
 
         # Refresh Table Button
         self.refreshTableButton = QPushButton()
         buttonHeight = self.refreshTableButton.sizeHint().height()
-        self.refreshTableButton.setIcon(QIcon("icons/iconmonstr-refresh-lined.svg"))
+        self.refreshTableButton.setIcon(QIcon("../resources/icons/iconmonstr-refresh-lined.svg"))
         self.refreshTableButton.setIconSize(QSize(buttonHeight, buttonHeight))
         self.refreshTableButton.clicked.connect(self.populateTable)
         self.headerLayout.addWidget(self.refreshTableButton)
@@ -1657,7 +1656,7 @@ class MainWindow(QMainWindow):
         # Setting up the main window
         self.setWindowTitle("Employee and Client Management System")
         self.setGeometry(100, 100, 1720, 600)
-        self.setWindowIcon(QIcon("icons/crm-icon-high-seas.png"))
+        self.setWindowIcon(QIcon("../resources/icons/crm-icon-high-seas.png"))
 
         # Create menu bar and add items
         menubar = self.menuBar()
@@ -1756,10 +1755,10 @@ def load_stylesheet() -> str:
     icons_path = f"{base_dir}/icons"
 
     try:
-        with open(os.path.join(base_dir, 'style_properties', 'stylesheet.qss'), "r") as file:
+        with open(os.path.join(base_dir, '../resources/style_properties', 'stylesheet.qss'), "r") as file:
             return file.read().replace('{{ICON_PATH}}', icons_path)
     except IOError:
-        print(f"Error opening stylesheet file: {os.path.join(base_dir, 'style_properties', 'stylesheet.qss')}")
+        print(f"Error opening stylesheet file: {os.path.join(base_dir, '../resources/style_properties', 'stylesheet.qss')}")
         return ""
 
 
