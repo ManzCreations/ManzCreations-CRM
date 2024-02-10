@@ -7,8 +7,8 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QIcon
 from mysql.connector import Error, MySQLConnection
 
-CONFIG_PATH = Path('tools/db_config.json')
-TABLE_QUERIES_PATH = Path('tools/table_schemas.json')
+CONFIG_PATH = Path('../resources/tools/db_config.json')
+TABLE_QUERIES_PATH = Path('../resources/tools/table_schemas.json')
 
 
 def load_json_file(file_path: Path = CONFIG_PATH, file_type: str = "JSON file") -> Optional[Dict]:

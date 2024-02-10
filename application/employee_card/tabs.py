@@ -266,7 +266,7 @@ class GeneralDataTab(QWidget):
     @staticmethod
     def get_defined_columns_for_table(table_name):
         # Load the JSON schema for the table
-        table_schemas = load_json_file(Path('tools/table_schemas.json'))
+        table_schemas = load_json_file(Path('../resources/tools/table_schemas.json'))
         if table_name in table_schemas:
             # Extract just the column names from the SQL definition
             columns = [line.split()[0] for line in table_schemas[table_name] if line.upper().startswith('    ')]
