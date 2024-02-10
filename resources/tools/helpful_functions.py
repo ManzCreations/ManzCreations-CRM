@@ -56,7 +56,7 @@ def addToDatabase(data: Dict[str, str], headers: List[str], table_name: str, upd
             execute_query(sql, values)
         elif update_criteria == "update":
             # Constructing the SQL UPDATE statement dynamically based on the employee_data keys
-            update_parts = [f"{key} = %s" for key in data.keys()]
+            update_parts = [f"{key} = %s" for key in data]
             sql_update_query = f"UPDATE employees SET {', '.join(update_parts)} WHERE id = %s"
 
             # Preparing the data tuple including all data values followed by the employee_id
@@ -175,16 +175,16 @@ def change_active_needed_employees(employer_id, job_order_id, subtract_needed_em
         # Update clients table
         query = "SELECT active_employees FROM clients WHERE id = %s"
         result = execute_query(query, (employer_id,), fetch_mode='one')
-        if result:
-            active_employees = result[0]
-            new_active_employees = active_employees + 1 if subtract_needed_employees else active_employees - 1
+    if result:
+        active_employees = result[0]
+        new_active_employees = active_employees + 1 if subtract_needed_employees else active_employees - 1
 
-            update_query = """
+        update_query = """
                     UPDATE clients 
                     SET active_employees = %s 
                     WHERE id = %s
                     """
-            execute_query(update_query, (new_active_employees, employer_id))
+        execute_query(update_query, (new_active_employees, employer_id))
 
 
 def convert_doc_to_docx(doc_path):
@@ -193,8 +193,7 @@ def convert_doc_to_docx(doc_path):
     subprocess.run(['libreoffice', '--convert-to', 'docx', '--outdir', tmp_dir, doc_path], stdout=subprocess.PIPE,
                    stderr=subprocess.PIPE)
     base_name = os.path.splitext(os.path.basename(doc_path))[0]
-    converted_path = os.path.join(tmp_dir, f"{base_name}.docx")
-    return converted_path
+    return os.path.join(tmp_dir, f"{base_name}.docx")
 
 
 def read_docx_file(file_path):
@@ -206,9 +205,7 @@ def read_docx_file(file_path):
 def read_pdf_file(file_path):
     """Reads a .pdf file and returns its text content."""
     with fitz.open(file_path) as doc:
-        text = ""
-        for page in doc:
-            text += page.get_text()
+        text = "".join(page.get_text() for page in doc)
     return text
 
 

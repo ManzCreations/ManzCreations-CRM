@@ -151,8 +151,7 @@ class JobOrderCard(QDialog):
         query = "SELECT job_title FROM job_orders WHERE id = %s"
         data = (self.job_id,)
 
-        result = execute_query(query, data, fetch_mode="one")
-        if result:
+        if result := execute_query(query, data, fetch_mode="one"):
             self.name_label.setText(result[0])
         else:
             self.name_label.setText("Job Title Not Available")
@@ -268,16 +267,17 @@ class JobOrderCard(QDialog):
         # Load the JSON schema for the table
         table_schemas = load_json_file(Path('tools/table_schemas.json'))
         if table_name in table_schemas:
-            # Extract just the column names from the SQL definition
-            columns = [line.split()[0] for line in table_schemas[table_name] if line.upper().startswith('    ')]
-            return columns
+            return [
+                line.split()[0]
+                for line in table_schemas[table_name]
+                if line.upper().startswith('    ')
+            ]
         return []
 
     @staticmethod
     def get_actual_columns_from_db(table_name):
-        query = "SHOW COLUMNS FROM " + table_name
-        result = execute_query(query, fetch_mode="all", skip_SELECT=True)
-        if result:
+        query = f"SHOW COLUMNS FROM {table_name}"
+        if result := execute_query(query, fetch_mode="all", skip_SELECT=True):
             # The column name is the first item in each tuple returned
             return [column[0] for column in result]
         return []
@@ -290,8 +290,7 @@ class JobOrderCard(QDialog):
         for column in self.extra_columns:
             # Fetch the data for the extra column for the given job order
             query = f"SELECT {column} FROM job_orders WHERE id = %s"
-            result = execute_query(query, (job_id,), fetch_mode="one")
-            if result:
+            if result := execute_query(query, (job_id,), fetch_mode="one"):
                 # Calculate grid position
                 row = column_index // 2  # Integer division to calculate the row
                 col = column_index % 2  # Modulo to alternate between columns 0 and 1

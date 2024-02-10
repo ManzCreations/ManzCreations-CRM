@@ -392,35 +392,31 @@ class EmployeePage(QWidget):
         methods for adding the data to the database and updating the GUI table.
         """
         dialog = AddEmployeeDialog()
-        if dialog.exec_() == QDialog.Accepted:
-            employee_data = dialog.getEmployeeData()
-            sql_headers = list(employee_data.keys())
-
-            # Check if an employee with the same name already exists
-            query = "SELECT id FROM employees WHERE first_name = %s AND last_name = %s"
-            result = execute_query(query, (employee_data["first_name"], employee_data["last_name"]))
-            existing_employee_id = False
-            if result:
-                existing_employee_id = result[0]
-            if existing_employee_id:
-                reply = QMessageBox.question(
-                    self, 'Update Existing Employee',
-                    "An employee with the same name already exists. Would you like to update their information?",
-                    QMessageBox.Yes | QMessageBox.No, QMessageBox.No
-                )
-
-                if reply == QMessageBox.Yes:
-                    addToDatabase(employee_data, sql_headers,
-                                  "employees", "update", existing_employee_id)
-                    QMessageBox.information(self, "Updated", "The employee's information has been updated.")
-                else:
-                    return  # Do not proceed with adding a new employee
-            else:
-                addToDatabase(employee_data, sql_headers, "employees")
-            self.populateTable(self.employee_type)
-        else:
+        if dialog.exec_() != QDialog.Accepted:
             return
 
+        employee_data = dialog.getEmployeeData()
+        sql_headers = list(employee_data.keys())
+
+        # Check if an employee with the same name already exists
+        query = "SELECT id FROM employees WHERE first_name = %s AND last_name = %s"
+        result = execute_query(query, (employee_data["first_name"], employee_data["last_name"]))
+        existing_employee_id = result[0] if result else False
+        if existing_employee_id:
+            reply = QMessageBox.question(
+                self, 'Update Existing Employee',
+                "An employee with the same name already exists. Would you like to update their information?",
+                QMessageBox.Yes | QMessageBox.No, QMessageBox.No
+            )
+
+            if reply != QMessageBox.Yes:
+                return  # Do not proceed with adding a new employee
+            addToDatabase(employee_data, sql_headers,
+                          "employees", "update", existing_employee_id)
+            QMessageBox.information(self, "Updated", "The employee's information has been updated.")
+        else:
+            addToDatabase(employee_data, sql_headers, "employees")
+        self.populateTable(self.employee_type)
         # Determine the id for the new employee based on the database
         query = "SELECT id FROM employees WHERE first_name = %s AND last_name = %s"
         result = execute_query(query, (employee_data["first_name"], employee_data["last_name"]))
@@ -692,19 +688,19 @@ class ClientPage(QWidget):
                     with connection.cursor() as cursor:
                         # Begin a transaction
                         connection.start_transaction()
+                        # Fetch employer_company for the selected row
+                        employer_company_query = "SELECT employer_company FROM clients WHERE id = %s"
+                        # Fetch all job order ids for this company
+                        job_order_ids_query = "SELECT id FROM job_orders WHERE company = %s"
                         for selectedRow in sorted(selectedRows, reverse=True):
                             idToDelete = selectedRow.row() + 1
                             for i in range(self.tableWidget.columnCount()):
                                 if self.tableWidget.isColumnHidden(i):
                                     idToDelete = int(self.tableWidget.item(selectedRow.row(), i).text())
 
-                            # Fetch employer_company for the selected row
-                            employer_company_query = "SELECT employer_company FROM clients WHERE id = %s"
                             cursor.execute(employer_company_query, (idToDelete,))
                             employer_company = cursor.fetchone()
 
-                            # Fetch all job order ids for this company
-                            job_order_ids_query = "SELECT id FROM job_orders WHERE company = %s"
                             cursor.execute(job_order_ids_query, employer_company)
                             job_order_ids = cursor.fetchall()
 
@@ -712,9 +708,7 @@ class ClientPage(QWidget):
                                 # Archive and delete each job order
                                 archive_and_delete_company_job_order(idToDelete, job_order_id[0])
 
-                            # Assuming the table is named 'employees', adjust as necessary
-                            deleteQuery = "DELETE FROM clients WHERE id = %s"
-                            cursor.execute(deleteQuery, (idToDelete,))
+                            cursor.execute("DELETE FROM clients WHERE id = %s", (idToDelete,))
                         # Commit the transaction
                         connection.commit()
                     QMessageBox.information(self, "Success", "The selected entries have been deleted.")
@@ -843,7 +837,7 @@ class ClientPage(QWidget):
         """
         # Make sure the user only selects a single company
         selectedCells = self.tableWidget.selectionModel().selectedIndexes()
-        uniqueRows = set(cell.row() for cell in selectedCells)
+        uniqueRows = {cell.row() for cell in selectedCells}
         employerData = {}
         employer_id = None
         if len(uniqueRows) == 1:
@@ -872,8 +866,7 @@ class ClientPage(QWidget):
 
         # Now, use this information to query your database and fetch the corresponding employer_id
         query = "SELECT id FROM clients WHERE employer_company = %s"
-        result = execute_query(query, (employer_company,))
-        if result:
+        if result := execute_query(query, (employer_company,)):
             return result[0]  # Return the first element of the tuple
         else:
             return None
@@ -890,10 +883,10 @@ class ClientPage(QWidget):
 
             # Check if an employer with the same name already exists
             query = "SELECT id FROM clients WHERE employer_company = %s"
-            result = execute_query(query, (client_data["employer_company"],))
-            existing_employer_id = False
-            if result:
+            if result := execute_query(query, (client_data["employer_company"],)):
                 existing_employer_id = result[0]
+            else:
+                existing_employer_id = False
             if existing_employer_id:
                 reply = QMessageBox.question(
                     self, 'Update Existing Client',
@@ -901,11 +894,10 @@ class ClientPage(QWidget):
                     QMessageBox.Yes | QMessageBox.No, QMessageBox.No
                 )
 
-                if reply == QMessageBox.Yes:
-                    addToDatabase(client_data, sql_headers, "clients", "update", existing_employer_id)
-                    QMessageBox.information(self, "Updated", "The client's information has been updated.")
-                else:
+                if reply != QMessageBox.Yes:
                     return  # Do not proceed with adding a new employer
+                addToDatabase(client_data, sql_headers, "clients", "update", existing_employer_id)
+                QMessageBox.information(self, "Updated", "The client's information has been updated.")
             else:
                 addToDatabase(client_data, sql_headers, "clients")
             self.populateTable()
@@ -1155,15 +1147,13 @@ class CurrentJobOrdersPage(QWidget):
     def remove_active_employees_from_client(employer_id, job_order_id):
         # Fetch the current values of needed_employees and active_employees
         query = "SELECT active_employees FROM job_orders WHERE id = %s"
-        result = execute_query(query, (job_order_id,), fetch_mode='one')
-        if result:
+        if result := execute_query(query, (job_order_id,), fetch_mode='one'):
             jo_active_employees = result[0]
         else:
             return
 
         query = "SELECT active_employees FROM clients WHERE id = %s"
-        result = execute_query(query, (employer_id,), fetch_mode='one')
-        if result:
+        if result := execute_query(query, (employer_id,), fetch_mode='one'):
             cl_active_employees = result[0]
         else:
             return
@@ -1773,12 +1763,12 @@ def update_employee_availability():
             """
     job_orders_ending_soon = execute_query(job_orders_ending_soon_query, (today, one_month_away), fetch_mode='all')
 
-    # Update employees associated with these job orders to "~A"
-    for job_id in job_orders_ending_soon:
-        update_employees_availability_query = """
+    update_employees_availability_query = """
             UPDATE employees SET availability = '~A'
             WHERE id IN (SELECT employee_id FROM job2employer_ids WHERE job_order_id = %s)
             """
+    # Update employees associated with these job orders to "~A"
+    for job_id in job_orders_ending_soon:
         execute_query(update_employees_availability_query, (job_id[0],))
 
     # Step 2: Find job orders that ended yesterday
@@ -1820,18 +1810,14 @@ def main():
     app.setFont(QFont("Arial", 10))
     stylesheet = load_stylesheet()
     app.setStyleSheet(stylesheet)
-    # Try connecting and checking the database and tables
-    config = load_json_file(file_type="Database Configuration JSON file")
-    if config:
+    if config := load_json_file(file_type="Database Configuration JSON file"):
         # Try to connect with existing config
         connection_success = check_database_and_tables(config["database"])
     else:
         connection_success = False
 
     if not connection_success:
-        # Show dialog to get new database info
-        db_info = getDatabaseInfo()
-        if db_info:
+        if db_info := getDatabaseInfo():
             host, user, password, database = db_info
             # Save new config and attempt to create the database and tables
             new_config = {"host": host, "user": user, "password": password, "database": database}

@@ -26,7 +26,7 @@ class FocusLineEdit(QLineEdit):
         super().__init__(parent)
 
     def keyPressEvent(self, event: QKeyEvent):
-        if event.key() == Qt.Key_Return or event.key() == Qt.Key_Enter:
+        if event.key() in [Qt.Key_Return, Qt.Key_Enter]:
             self.parent().focusNextChild()
         else:
             super().keyPressEvent(event)
@@ -600,8 +600,7 @@ class JobOrderPage(QDialog):
     def updateContactAndBilling(self, companyName):
         # Update contact person and billing allowance based on selected company
         query = "SELECT contact_person, billing_allowance FROM clients WHERE employer_company = %s"
-        result = execute_query(query, (companyName,), fetch_mode="one")
-        if result:
+        if result := execute_query(query, (companyName,), fetch_mode="one"):
             contact_person, billing_allowance = result
             self.contactNameEdit.setText(contact_person)
             self.billingAllowanceEdit.setText(self.getBillingAllowanceString(billing_allowance))
@@ -779,10 +778,7 @@ class JobOrderPage(QDialog):
     def getEmployeeIdByName(name: str) -> int:
         """Retrieves the employee ID based on the provided name."""
         query = "SELECT id FROM employees WHERE CONCAT(first_name, ' ', last_name) = %s"
-        result = execute_query(query, (name,))
-        if result:
-            return result[0]
-        return 0  # Return 0 if not found or on error
+        return result[0] if (result := execute_query(query, (name,))) else 0
 
     @staticmethod
     def insertJobOrder(poOrderNumber, location, company, start_date, end_date,

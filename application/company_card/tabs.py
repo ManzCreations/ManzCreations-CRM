@@ -32,16 +32,16 @@ class CardTableWidget(QTableWidget):
 
     def populateTable(self, job_orders):
         self.setRowCount(len(job_orders))
+        # Assuming the job title is unique and you have a method to execute SQL queries
+        query = "SELECT id FROM job_orders WHERE job_title = %s AND po_order_number = %s AND company = %s"
         for row_index, job_order in enumerate(job_orders):
             job_title = job_order.get("Job Title", "")
             po_order = job_order.get("PO Order Number", "")
             company = job_order.get("Company", "")
 
-            # Assuming the job title is unique and you have a method to execute SQL queries
-            query = "SELECT id FROM job_orders WHERE job_title = %s AND po_order_number = %s AND company = %s"
-            result = execute_query(query, (job_title, po_order, company), fetch_mode="one")
-
-            if result:
+            if result := execute_query(
+                query, (job_title, po_order, company), fetch_mode="one"
+            ):
                 job_id = result[0]
                 self.job_ids[row_index] = job_id  # Store the job_id associated with this row
             else:
@@ -118,8 +118,7 @@ class CardTableWidget(QTableWidget):
             maxWidth = fontMetrics.width(self.horizontalHeaderItem(column).text()) + 50  # Adding some padding
 
             for row in range(self.rowCount()):
-                item = self.item(row, column)
-                if item:  # Check if item is not None
+                if item := self.item(row, column):
                     itemWidth = fontMetrics.width(item.text()) + 50  # Again, adding some padding
                     maxWidth = max(maxWidth, itemWidth)
 
@@ -269,16 +268,17 @@ class CompanyInformationTab(QWidget):
         # Load the JSON schema for the table
         table_schemas = load_json_file(Path('tools/table_schemas.json'))
         if table_name in table_schemas:
-            # Extract just the column names from the SQL definition
-            columns = [line.split()[0] for line in table_schemas[table_name] if line.upper().startswith('    ')]
-            return columns
+            return [
+                line.split()[0]
+                for line in table_schemas[table_name]
+                if line.upper().startswith('    ')
+            ]
         return []
 
     @staticmethod
     def get_actual_columns_from_db(table_name):
         query = "SHOW COLUMNS FROM " + table_name
-        result = execute_query(query, fetch_mode="all", skip_SELECT=True)
-        if result:
+        if result := execute_query(query, fetch_mode="all", skip_SELECT=True):
             # The column name is the first item in each tuple returned
             return [column[0] for column in result]
         return []
@@ -289,8 +289,7 @@ class CompanyInformationTab(QWidget):
         for column in self.extra_columns:
             # Fetch the data for the extra column for the given employee
             query = f"SELECT {column} FROM clients WHERE id = %s"
-            result = execute_query(query, (company_id,), fetch_mode="one")
-            if result:
+            if result := execute_query(query, (company_id,), fetch_mode="one"):
                 # Display the extra data
                 self.addDataRow(formLayout, column.replace('_', ' ').title() + ":", column, None, {column: result[0]},
                                 titleFont, dataFont)
@@ -386,8 +385,7 @@ class CurrentJobOrdersTab(QWidget):
     def fetch_company_name(self):
         # Fetch the first and last name of the employee from the employees table
         query = "SELECT employer_company FROM clients WHERE id = %s"
-        result = execute_query(query, (self.employer_id,), fetch_mode="one")
-        if result:
+        if result := execute_query(query, (self.employer_id,), fetch_mode="one"):
             # Directly return the tuple assuming the first element is first_name and the second is last_name
             return result[0]
         return "Unknown"
@@ -405,8 +403,7 @@ class CurrentJobOrdersTab(QWidget):
         columns = ["Job Title", "PO Order Number", "Company", "Location", "Start Date", "End Date", "Active Employees",
                    "Needed Employees", "Position Type", "Bill Rate (Min)", "Bill Rate (Max)", "Bill Rate", "Pay",
                    "Pay Rate", "Min Experience", "Requirements", "Remote (%)", "Job Description Path", "Notes Path"]
-        job_orders = [dict(zip(columns, result)) for result in results]
-        return job_orders
+        return [dict(zip(columns, result)) for result in results]
 
     def updateButtonStyle(self, sender):
         """
@@ -590,8 +587,7 @@ class OldCompanyJobOrdersTab(QWidget):
     def fetch_company_name(self):
         # Fetch the first and last name of the employee from the employees table
         query = "SELECT employer_company FROM clients WHERE id = %s"
-        result = execute_query(query, (self.employer_id,), fetch_mode="one")
-        if result:
+        if result := execute_query(query, (self.employer_id,), fetch_mode="one"):
             # Directly return the tuple assuming the first element is first_name and the second is last_name
             return result[0]
         return "Unknown"
@@ -609,8 +605,7 @@ class OldCompanyJobOrdersTab(QWidget):
         columns = ["Contact Person", "Location", "PO Order Number", "Start Date", "End Date", "Needed Employees",
                    "Job Title", "Position Type", "Bill Rate (Min)", "Bill Rate (Max)", "Bill Rate", "Pay Rate",
                    "Pay Rate", "Min Experience", "Requirements", "Remote (%)", "Job Description Path", "Notes Path"]
-        job_orders = [dict(zip(columns, result)) for result in results]
-        return job_orders
+        return [dict(zip(columns, result)) for result in results]
 
     def updateButtonStyle(self, sender):
         """

@@ -75,8 +75,7 @@ class ClientCard(QDialog):
         query = "SELECT employer_company FROM clients WHERE id = %s"
         data = (self.company_id,)
 
-        result = execute_query(query, data, fetch_mode="one")
-        if result:
+        if result := execute_query(query, data, fetch_mode="one"):
             self.name_label.setText(result[0])
         else:
             self.name_label.setText("Company Name Not Available")

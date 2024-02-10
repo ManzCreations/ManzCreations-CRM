@@ -216,8 +216,7 @@ def create_table(table_name: str) -> None:
         None
     """
     queries = load_json_file(TABLE_QUERIES_PATH)
-    query = queries.get(table_name)
-    if query:
+    if query := queries.get(table_name):
         try:
             execute_query(query)
             print(f"Table {table_name} checked/created successfully.")

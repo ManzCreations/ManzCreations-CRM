@@ -87,24 +87,19 @@ class CardTableWidget(QTableWidget):
 
     def onItemDoubleClicked(self, item):
         row = item.row()
-        job_id_column = None
-
-        # Loop through the columns to find the hidden one (assumed to be job_id)
-        for col in range(self.columnCount()):
-            if self.isColumnHidden(col):
-                job_id_column = col
-                break
-
-        if job_id_column is not None:
-            job_id_item = self.item(row, job_id_column)
-            if job_id_item:
-                job_id = int(job_id_item.text())
-                jobCard = JobOrderCard(job_id)
-                jobCard.exec_()
-            else:
-                QMessageBox.warning(self, "Error", "Employee ID not found for the selected row.")
-        else:
+        job_id_column = next(
+            (col for col in range(self.columnCount()) if self.isColumnHidden(col)),
+            None,
+        )
+        if job_id_column is None:
             QMessageBox.warning(self, "Error", "Employee ID column not found.")
+
+        elif job_id_item := self.item(row, job_id_column):
+            job_id = int(job_id_item.text())
+            jobCard = JobOrderCard(job_id)
+            jobCard.exec_()
+        else:
+            QMessageBox.warning(self, "Error", "Employee ID not found for the selected row.")
 
     def onHeaderClicked(self, logicalIndex):
         self.currentSortOrder = not getattr(self, 'currentSortOrder', False)
@@ -155,8 +150,7 @@ class CardTableWidget(QTableWidget):
             maxWidth = fontMetrics.width(self.horizontalHeaderItem(column).text()) + 50  # Adding some padding
 
             for row in range(self.rowCount()):
-                item = self.item(row, column)
-                if item:  # Check if item is not None
+                if item := self.item(row, column):
                     itemWidth = fontMetrics.width(item.text()) + 50  # Again, adding some padding
                     maxWidth = max(maxWidth, itemWidth)
 
@@ -260,8 +254,7 @@ class RankingJobOrderResultsDialog(QDialog):
 
     def populateJobOrders(self):
         query = "SELECT resume_path, first_name, last_name FROM employees"
-        results = execute_query(query, fetch_mode='all')
-        if results:
+        if results := execute_query(query, fetch_mode='all'):
             for resume_path, first_name, last_name in results:
                 combo_box_string = f"{first_name} {last_name}"
                 self.employeeComboBox.addItem(combo_box_string)
@@ -405,10 +398,13 @@ class RankingJobOrderResultsDialog(QDialog):
         vectorizer = TfidfVectorizer()
         tfidf_matrix = vectorizer.fit_transform(texts)
 
-        cosine_similarities = cosine_similarity(tfidf_matrix[0:1], tfidf_matrix[1:])
+        cosine_similarities = cosine_similarity(tfidf_matrix[:1], tfidf_matrix[1:])
         similarity_scores = cosine_similarities.flatten()
-        rankings = sorted([(job_id, score) for job_id, score in zip(job_data, similarity_scores)],
-                          key=lambda x: x[1], reverse=True)
+        rankings = sorted(
+            list(zip(job_data, similarity_scores)),
+            key=lambda x: x[1],
+            reverse=True,
+        )
 
         self.table.populateTable(rankings)
 
