@@ -74,8 +74,10 @@ class AddEmployeeDialog(QDialog):
 
         # Set up validators
         only_letters_validator = QRegExpValidator(QRegExp("^[A-Za-z]+$"))
-        self.fNameEdit.setValidator(only_letters_validator)
-        self.lNameEdit.setValidator(only_letters_validator)
+        first_name_validator = QRegExpValidator(QRegExp("^[A-Za-z]+(?:\s[A-Za-z\.]+)?$"))
+        last_name_validator = QRegExpValidator(QRegExp("^[A-Za-z]+(?:\s(?:Jr\.|Sr\.|III|IV|V|VI|[A-Za-z]+))?$"))
+        self.fNameEdit.setValidator(first_name_validator)
+        self.lNameEdit.setValidator(last_name_validator)
         self.cityEdit.setValidator(only_letters_validator)
         self.stateEdit.setValidator(only_letters_validator)
 
