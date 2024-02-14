@@ -78,6 +78,27 @@ document.addEventListener("DOMContentLoaded", function() {
         field.addEventListener('blur', () => validateField(field));
     });
 
+    form.addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            const activeElement = document.activeElement;
+            const submitButton = form.querySelector('[type="submit"]');
+
+            if (activeElement !== submitButton) {
+                event.preventDefault(); // Prevent form submission
+
+                // Mimic tab behavior - move focus to the next focusable element
+                const focusableElements = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+                const focusables = Array.from(form.querySelectorAll(focusableElements)).filter(element => !element.disabled);
+
+                const currentFocusIndex = focusables.indexOf(document.activeElement);
+                const nextFocusIndex = (currentFocusIndex + 1) % focusables.length;
+
+                focusables[nextFocusIndex].focus();
+            }
+            // If the submit button is focused, allow the default form submission
+        }
+    });
+
     form.addEventListener('submit', function(e) {
         e.preventDefault();
         formIsValid = true;
