@@ -49,8 +49,8 @@ Create a JSON file named `config.json` in the root of the project directory with
  ],
  "gpg_binary_path": "C:/Program Files (x86)/GnuPG/bin/gpg.exe",
  "gpg_home": "C:/Users/manzf/AppData/Roaming/gnupg"
-}```
-
+}
+```
 Replace YourPassphraseHere with the passphrase provided by the owner of the code.
 
 ### Creating an Executable from the Python Application
