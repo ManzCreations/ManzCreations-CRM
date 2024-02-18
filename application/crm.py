@@ -6,6 +6,12 @@ import pandas as pd
 from PyQt5.QtCore import Qt, QSize
 from PyQt5.QtGui import QFont
 
+from resources.tools.decrypt_encrypted_files import decrypt_files
+
+# Before doing anything, decrypt necessary files
+decrypt_files()
+
+# Import application specific files
 from application.employee_card.employee_card import EmployeeCard
 from application.external_widgets.add_client import AddClientDialog
 from application.external_widgets.add_employee import AddEmployeeDialog
@@ -13,6 +19,7 @@ from application.external_widgets.job_order_dialog import JobOrderPage
 from application.external_widgets.other import TableWidget, getDatabaseInfo
 from application.finder_agent.find_employees import RankingEmployeeResultsDialog
 from application.finder_agent.find_job_orders import RankingJobOrderResultsDialog
+
 from resources.tools.helpful_functions import *
 from resources.tools.mydb import *
 
@@ -1758,7 +1765,8 @@ def load_stylesheet() -> str:
         with open(os.path.join(base_dir, '../resources/style_properties', 'stylesheet.qss'), "r") as file:
             return file.read().replace('{{ICON_PATH}}', icons_path)
     except IOError:
-        print(f"Error opening stylesheet file: {os.path.join(base_dir, '../resources/style_properties', 'stylesheet.qss')}")
+        print(
+            f"Error opening stylesheet file: {os.path.join(base_dir, '../resources/style_properties', 'stylesheet.qss')}")
         return ""
 
 
