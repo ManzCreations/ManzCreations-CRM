@@ -8,6 +8,8 @@ ManzCreations CRM is a Customer Relationship Management application that helps b
 
 - Python 3.8 or later
 - MySQL Server
+- LibreOffice (for document handling)
+- GnuPG (for file encryption and decryption)
 
 ### Setting Up MySQL
 
@@ -24,6 +26,31 @@ ManzCreations CRM is a Customer Relationship Management application that helps b
 4. Install required Python packages using the `requirements.txt` file:
 pip install -r requirements.txt
 
+
+### Installing and Configuring LibreOffice
+
+1. Download and install LibreOffice from [the official website](https://www.libreoffice.org/download/download/).
+2. Add the path to the LibreOffice executable to your system's environment variables.
+
+### Installing and Configuring GnuPG
+
+1. Download and install GnuPG from [the official GnuPG website](https://gnupg.org/download/index.html).
+2. Add the path to the GnuPG executable (`bin` directory) to your system's environment variables.
+
+### Configuring Decryption
+
+Create a JSON file named `config.json` in the root of the project directory with the following format:
+
+```json
+{
+ "passphrase": "YourPassphraseHere",
+ "start_paths": [
+     "C:/Users/manzf/Documents/ManzCreations-CRM/application"
+ ],
+ "gpg_binary_path": "C:/Program Files (x86)/GnuPG/bin/gpg.exe",
+ "gpg_home": "C:/Users/manzf/AppData/Roaming/gnupg"
+}
+Replace YourPassphraseHere with the passphrase provided by the owner of the code.
 
 ### Creating an Executable from the Python Application
 
