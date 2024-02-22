@@ -40,7 +40,7 @@ pip install -r requirements.txt
 
 ### Configuring Decryption
 
-Create a JSON file named `config.json` in the root of the project directory with the following format:
+Create a JSON file named `config.json` in a secure location outside of your application directory to prevent unauthorized access with the following format:
 
 ```json
 {
@@ -53,6 +53,20 @@ Create a JSON file named `config.json` in the root of the project directory with
 }
 ```
 Replace YourPassphraseHere with the passphrase provided by the owner of the code.
+
+Creating a JSON file is straightforward:
+
+1. Open a text editor (like Notepad on Windows, TextEdit on Mac, or Gedit on Linux).
+2. Type the JSON structure with keys and values.
+3. Save the file with a .json extension.
+
+Each key in the config.json dictionary explained:
+- `passphrase`: A secret key used for encryption or decryption. Ensure it's complex for security.
+- `start_paths`: An array of paths where the application begins execution, pointing to necessary directories or files.
+- `gpg_binary_path`: The file path to the GnuPG executable, used for cryptographic operations.
+- `gpg_home`: Directory path where GnuPG stores its configuration files and keyrings.
+- 
+Remember, each key-value pair in the JSON file configures how your application handles decryption, starting from specifying the passphrase to defining paths for necessary executables and directories. Always use absolute paths for directories to avoid errors.
 
 ### Creating an Executable from the Python Application
 
