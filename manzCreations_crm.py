@@ -1,6 +1,8 @@
 import locale
+import os
 import sys
 from datetime import datetime, timedelta
+from pathlib import Path
 
 import pandas as pd
 from PyQt5.QtCore import Qt, QSize
@@ -32,7 +34,15 @@ locale.setlocale(locale.LC_ALL, '')  # Set to the user's default locale
 
 ###################################
 # Column Headers
-column_data_path = Path('../resources/tools/column_data.json')
+
+# Determine if the application is a frozen executable or a script
+if getattr(sys, 'frozen', False):
+    application_path = sys._MEIPASS
+else:
+    application_path = os.path.dirname(os.path.abspath(__file__))
+
+# Example of how to use application_path to build a path to resources
+column_data_path = Path(application_path, 'resources', 'tools', 'column_data.json')
 HEADERS = load_json_file(column_data_path, "Column Data JSON file")
 
 
@@ -72,13 +82,14 @@ class EmployeePage(QWidget):
 
         # Optional: Add an image to the header
         self.headerIcon = QLabel()
-        self.headerIcon.setPixmap(QIcon('../resources/example.png').pixmap(50, 50))
+        self.headerIcon.setPixmap(QIcon(str(Path(application_path, 'resources', 'example.png'))).pixmap(50, 50))
         self.headerLayout.addWidget(self.headerIcon)
 
         # Refresh Table Button
         self.refreshTableButton = QPushButton()
         buttonHeight = self.refreshTableButton.sizeHint().height()
-        self.refreshTableButton.setIcon(QIcon("../resources/icons/iconmonstr-refresh-lined.svg"))
+        self.refreshTableButton.setIcon(QIcon(str(Path(application_path, 'resources', 'icons',
+                                                   'iconmonstr-refresh-lined.svg'))))
         self.refreshTableButton.setIconSize(QSize(buttonHeight, buttonHeight))
         self.refreshTableButton.clicked.connect(self.populateTable)
         self.headerLayout.addWidget(self.refreshTableButton)
@@ -529,13 +540,14 @@ class ClientPage(QWidget):
 
         # Optional: Add an image to the header
         self.headerIcon = QLabel()
-        self.headerIcon.setPixmap(QIcon('../resources/example.png').pixmap(50, 50))
+        self.headerIcon.setPixmap(QIcon(str(Path(application_path, 'resources', 'example.png'))).pixmap(50, 50))
         self.headerLayout.addWidget(self.headerIcon)
 
         # Refresh Table Button
         self.refreshTableButton = QPushButton()
         buttonHeight = self.refreshTableButton.sizeHint().height()
-        self.refreshTableButton.setIcon(QIcon("../resources/icons/iconmonstr-refresh-lined.svg"))
+        self.refreshTableButton.setIcon(QIcon(str(Path(application_path, 'resources', 'icons',
+                                                   'iconmonstr-refresh-lined.svg'))))
         self.refreshTableButton.setIconSize(QSize(buttonHeight, buttonHeight))
         self.refreshTableButton.clicked.connect(self.populateTable)
         self.headerLayout.addWidget(self.refreshTableButton)
@@ -1663,7 +1675,7 @@ class MainWindow(QMainWindow):
         # Setting up the main window
         self.setWindowTitle("Employee and Client Management System")
         self.setGeometry(100, 100, 1720, 600)
-        self.setWindowIcon(QIcon("../resources/icons/crm-icon-high-seas.png"))
+        self.setWindowIcon(QIcon(str(Path(application_path, 'resources', 'icons', 'crm-icon-high-seas.png'))))
 
         # Create menu bar and add items
         menubar = self.menuBar()
@@ -1758,15 +1770,14 @@ def load_stylesheet() -> str:
     :return: The stylesheet content as a string.
     """
     # Determine the full path to the icons folder
-    base_dir = os.path.dirname(os.path.realpath(__file__)).replace('\\', '/')
-    icons_path = f"{base_dir}/icons"
-
+    icons_path = Path(application_path, 'resources', 'icons')
     try:
-        with open(os.path.join(base_dir, '../resources/style_properties', 'stylesheet.qss'), "r") as file:
-            return file.read().replace('{{ICON_PATH}}', icons_path)
+        with open(Path(application_path, 'resources', 'style_properties', 'stylesheet.qss'), "r") as file:
+            return file.read().replace('{{ICON_PATH}}', str(icons_path).replace("\\", "/"))
     except IOError:
         print(
-            f"Error opening stylesheet file: {os.path.join(base_dir, '../resources/style_properties', 'stylesheet.qss')}")
+            f"Error opening stylesheet file: "
+            f"{Path(application_path, 'resources', 'style_properties', 'stylesheet.qss')}")
         return ""
 
 

@@ -1,4 +1,6 @@
 import json
+import sys
+import os
 from pathlib import Path
 from typing import Tuple, Any, Optional, Dict, Union
 
@@ -7,8 +9,17 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QIcon
 from mysql.connector import Error, MySQLConnection
 
-CONFIG_PATH = Path('../resources/tools/db_config.json')
-TABLE_QUERIES_PATH = Path('../resources/tools/table_schemas.json')
+# Determine if the application is a frozen executable or a script
+if getattr(sys, 'frozen', False):
+    application_path = Path(sys._MEIPASS)
+else:
+    application_path = Path(os.path.dirname(os.path.abspath(__file__)))
+
+# Go up two levels from the current application_path
+application_path = application_path.parent.parent
+
+CONFIG_PATH = Path(Path(application_path, 'resources', 'tools', 'db_config.json'))
+TABLE_QUERIES_PATH = Path(Path(application_path, 'resources', 'tools', 'table_schemas.json'))
 
 
 def load_json_file(file_path: Path = CONFIG_PATH, file_type: str = "JSON file", skip_error_dlg: bool = False) \
@@ -233,7 +244,7 @@ def create_table(table_name: str) -> None:
 def showCriticalMessage(title, message):
     dialog = QDialog()
     dialog.setWindowTitle(title)
-    dialog.setWindowIcon(QIcon("icons/crm-icon-high-seas.png"))
+    dialog.setWindowIcon(QIcon(str(Path(application_path, 'resources', 'icons', 'crm-icon-high-seas.png'))))
     layout = QVBoxLayout()
 
     # Message Label with word wrap enabled

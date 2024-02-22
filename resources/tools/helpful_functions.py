@@ -1,13 +1,24 @@
 import os
+import sys
 import subprocess
 import tempfile
 from typing import Dict, List
+from pathlib import Path
 
 import docx
 import fitz  # PyMuPDF
 from PyQt5.QtWidgets import QMessageBox
 
 from resources.tools.mydb import *
+
+# Determine if the application is a frozen executable or a script
+if getattr(sys, 'frozen', False):
+    application_path = Path(sys._MEIPASS)
+else:
+    application_path = Path(os.path.dirname(os.path.abspath(__file__)))
+
+# Go up two levels from the current application_path
+application_path = application_path.parent.parent
 
 
 def show_error_message(message: str) -> None:
@@ -20,7 +31,7 @@ def show_error_message(message: str) -> None:
     msgBox.setIcon(QMessageBox.Warning)
     msgBox.setText(message)
     msgBox.setWindowTitle("Error")
-    msgBox.setWindowIcon(QIcon("icons/crm-icon-high-seas.png"))
+    msgBox.setWindowIcon(QIcon(str(Path(application_path, 'resources', 'icons', 'crm-icon-high-seas.png'))))
     msgBox.setStandardButtons(QMessageBox.Ok)
     msgBox.exec_()
 
