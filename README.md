@@ -13,10 +13,11 @@ ManzCreations CRM is a Customer Relationship Management application that helps b
 
 ### Setting Up MySQL
 
-1. Install MySQL Server on your system.
-2. Create a database for ManzCreations CRM:
+1. Before installing MySQL Server, ensure the Visual Studio 2019 x64 Redistributable is installed on your system. This is crucial for MySQL Server to function properly. Download and install the most updated version of Visual Studio 2019 x64 Redistributable from [the official Microsoft download page](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170).
+2. Install MySQL Server on your system.
+3. Create a database for ManzCreations CRM:
    CREATE DATABASE manzCreations_crm;
-3. Import the ManzCreations CRM database schema (provided separately).
+4. Import the ManzCreations CRM database schema (provided separately).
 
 ### Setting Up Python
 
