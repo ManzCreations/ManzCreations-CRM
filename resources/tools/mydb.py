@@ -11,13 +11,15 @@ CONFIG_PATH = Path('../resources/tools/db_config.json')
 TABLE_QUERIES_PATH = Path('../resources/tools/table_schemas.json')
 
 
-def load_json_file(file_path: Path = CONFIG_PATH, file_type: str = "JSON file") -> Optional[Dict]:
+def load_json_file(file_path: Path = CONFIG_PATH, file_type: str = "JSON file", skip_error_dlg: bool = False) \
+        -> Optional[Dict]:
     """
     Loads content from a specified JSON file.
 
     Args:
         file_path (Path): The file path to the JSON file.
         file_type (str): A string representing the type of file being loaded. Defaults to "JSON file".
+        skip_error_dlg (bool): A boolean operator that tells the script to open a dialog showing the error or not.
 
     Returns:
         Optional[Dict]: A dictionary containing the loaded data, or None if an error occurs.
@@ -27,7 +29,8 @@ def load_json_file(file_path: Path = CONFIG_PATH, file_type: str = "JSON file") 
             data = json.load(file)
         return data
     except FileNotFoundError:
-        showCriticalMessage("File Not Found Error", f"{file_type} not found.")
+        if not skip_error_dlg:
+            showCriticalMessage("File Not Found Error", f"{file_type} not found.")
         return None
     except json.JSONDecodeError:
         showCriticalMessage("JSON Decode Error", f"Error decoding {file_type}.")

@@ -1829,7 +1829,7 @@ def main():
     stylesheet = load_stylesheet()
     app.setStyleSheet(stylesheet)
     # Try connecting and checking the database and tables
-    config = load_json_file(file_type="Database Configuration JSON file")
+    config = load_json_file(file_type="Database Configuration JSON file", skip_error_dlg=True)
     if config:
         # Try to connect with existing config
         connection_success = check_database_and_tables(config["database"])

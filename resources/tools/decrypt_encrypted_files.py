@@ -83,6 +83,7 @@ def prompt_for_config_path():
     app = QApplication([])
     dialog = ConfigDialog(stylesheet)
     if dialog.exec_() == QDialog.Accepted:
+        set_config_path(dialog.configPath)
         return dialog.configPath
     return ""
 
