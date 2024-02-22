@@ -1,12 +1,9 @@
 import locale
-import os
-import sys
-from datetime import datetime, timedelta
-from pathlib import Path
+from datetime import timedelta
 
-import pandas as pd
-from PyQt5.QtCore import Qt, QSize
+from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QFont
+from PyQt5.QtWidgets import *
 
 from resources.tools import decrypt_files
 
@@ -14,8 +11,6 @@ from resources.tools import decrypt_files
 decrypt_files()
 
 # Import application specific files
-from application.employee_card.employee_card import EmployeeCard
-from application.company_card.company_card import ClientCard
 from application.external_widgets import *
 from application.finder_agent import *
 
@@ -85,7 +80,7 @@ class EmployeePage(QWidget):
         self.refreshTableButton = QPushButton()
         buttonHeight = self.refreshTableButton.sizeHint().height()
         self.refreshTableButton.setIcon(QIcon(str(Path(application_path, 'resources', 'icons',
-                                                   'iconmonstr-refresh-lined.svg'))))
+                                                       'iconmonstr-refresh-lined.svg'))))
         self.refreshTableButton.setIconSize(QSize(buttonHeight, buttonHeight))
         self.refreshTableButton.clicked.connect(self.populateTable)
         self.headerLayout.addWidget(self.refreshTableButton)
@@ -543,7 +538,7 @@ class ClientPage(QWidget):
         self.refreshTableButton = QPushButton()
         buttonHeight = self.refreshTableButton.sizeHint().height()
         self.refreshTableButton.setIcon(QIcon(str(Path(application_path, 'resources', 'icons',
-                                                   'iconmonstr-refresh-lined.svg'))))
+                                                       'iconmonstr-refresh-lined.svg'))))
         self.refreshTableButton.setIconSize(QSize(buttonHeight, buttonHeight))
         self.refreshTableButton.clicked.connect(self.populateTable)
         self.headerLayout.addWidget(self.refreshTableButton)
@@ -1863,5 +1858,5 @@ def main():
     sys.exit(app.exec_())
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
