@@ -8,22 +8,18 @@ import pandas as pd
 from PyQt5.QtCore import Qt, QSize
 from PyQt5.QtGui import QFont
 
-from resources.tools.decrypt_encrypted_files import decrypt_files
+from resources.tools import decrypt_files
 
 # Before doing anything, decrypt necessary files
 decrypt_files()
 
 # Import application specific files
 from application.employee_card.employee_card import EmployeeCard
-from application.external_widgets.add_client import AddClientDialog
-from application.external_widgets.add_employee import AddEmployeeDialog
-from application.external_widgets.job_order_dialog import JobOrderPage
-from application.external_widgets.other import TableWidget, getDatabaseInfo
-from application.finder_agent.find_employees import RankingEmployeeResultsDialog
-from application.finder_agent.find_job_orders import RankingJobOrderResultsDialog
+from application.company_card.company_card import ClientCard
+from application.external_widgets import *
+from application.finder_agent import *
 
-from resources.tools.helpful_functions import *
-from resources.tools.mydb import *
+from resources.tools import *
 
 locale.setlocale(locale.LC_ALL, '')  # Set to the user's default locale
 

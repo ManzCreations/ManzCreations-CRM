@@ -1,21 +1,15 @@
 import json
 import os
-import sys
 from pathlib import Path
 
 from PyQt5.QtWidgets import QApplication, QDialog, QVBoxLayout, QLabel, QLineEdit, QPushButton, QFileDialog, QHBoxLayout
 
+from .helpful_functions import get_application_path
+
 DECRYPTION_KEY_LOCATION = Path("path_to_some_persistent_storage.json")  # Update this path accordingly
 
-
 # Determine if the application is a frozen executable or a script
-if getattr(sys, 'frozen', False):
-    application_path = Path(sys._MEIPASS)
-else:
-    application_path = Path(os.path.dirname(os.path.abspath(__file__)))
-
-# Go up two levels from the current application_path
-application_path = application_path.parent.parent
+application_path = get_application_path()
 
 # Read the stylesheet content
 stylesheet_path = Path(application_path, 'resources', 'style_properties', 'stylesheet.qss')

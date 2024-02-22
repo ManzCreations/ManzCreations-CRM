@@ -9,14 +9,34 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QIcon
 from mysql.connector import Error, MySQLConnection
 
-# Determine if the application is a frozen executable or a script
-if getattr(sys, 'frozen', False):
-    application_path = Path(sys._MEIPASS)
-else:
-    application_path = Path(os.path.dirname(os.path.abspath(__file__)))
 
-# Go up two levels from the current application_path
-application_path = application_path.parent.parent
+def get_application_path():
+    # Determine if the application is a frozen executable or a script
+    if getattr(sys, 'frozen', False):
+        exe_path = Path(sys.executable).parent
+    else:
+        # If running as a script, go up two levels from the script's location to reach the project root
+        return Path(os.path.dirname(os.path.abspath(__file__))).parent.parent
+
+    # Construct the path to the JSON file based on the exe location
+    json_path = exe_path / 'path_to_some_persistent_storage.json'
+
+    # Attempt to read the JSON file
+    try:
+        with open(json_path, 'r') as file:
+            data = json.load(file)
+            # Assuming 'start_paths' is a list and you're interested in the first item
+            start_path = Path(data['start_paths'][0])
+            # Use the parent of the start_path as the application path
+            return start_path.parent
+    except Exception as e:
+        print(f"Error reading or processing the JSON file: {e}")
+        # Fallback to the exe_path if there's an issue
+        return exe_path
+
+
+# Determine if the application is a frozen executable or a script
+application_path = get_application_path()
 
 CONFIG_PATH = Path(Path(application_path, 'resources', 'tools', 'db_config.json'))
 TABLE_QUERIES_PATH = Path(Path(application_path, 'resources', 'tools', 'table_schemas.json'))
