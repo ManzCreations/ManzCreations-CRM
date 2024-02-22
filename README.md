@@ -65,7 +65,7 @@ Each key in the config.json dictionary explained:
 - `start_paths`: An array of paths where the application begins execution, pointing to necessary directories or files.
 - `gpg_binary_path`: The file path to the GnuPG executable, used for cryptographic operations.
 - `gpg_home`: Directory path where GnuPG stores its configuration files and keyrings.
-- 
+
 Remember, each key-value pair in the JSON file configures how your application handles decryption, starting from specifying the passphrase to defining paths for necessary executables and directories. Always use absolute paths for directories to avoid errors.
 
 ### Creating an Executable from the Python Application
