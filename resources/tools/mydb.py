@@ -224,7 +224,8 @@ def check_database_and_tables(database: str, config_path: Path = CONFIG_PATH) ->
         return False
 
     try:
-        tables = ["employees", "clients", "job_orders", "job2employer_ids"]
+        tables = ["employees", "clients", "job_orders", "job2employer_ids",
+                  "old_employee_job_orders", "old_company_job_orders"]
         for table in tables:
             result = execute_query(f"SHOW TABLES LIKE '{table}';")
             if not result:
