@@ -8,7 +8,7 @@ from PyQt5.QtWidgets import *
 from resources.tools import decrypt_files
 
 # Before doing anything, decrypt necessary files
-# decrypt_files()
+decrypt_files()
 
 # Import application specific files
 from application.external_widgets import *
