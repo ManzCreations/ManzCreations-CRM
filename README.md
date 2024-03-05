@@ -88,6 +88,58 @@ python manzCreations_crm.py
 or if using the executable:
 ./dist/manzCreations_crm
 
+## Features
+
+### Dashboard (Coming Soon)
+
+The Dashboard provides a centralized view of key metrics and statuses, offering insights into the overall performance of your business operations. 
+
+![image](https://github.com/ManzCreations/ManzCreations-CRM/assets/128404387/0b93da66-0e88-4ff6-8644-59d8a7d241f6)
+
+### Employee Side
+
+On the Employee Side, users are empowered with functionalities to manage employee information effectively:
+
+- **Add New Employees:** Easily onboard new employees by entering their details into the system.
+
+  ![image](https://github.com/ManzCreations/ManzCreations-CRM/assets/128404387/1f6eeff0-1d07-42d9-80cc-9c63300f5a69)
+
+- **Employee Card Access:** By double-clicking on any of the employee entries, users can view detailed employee cards, which contain comprehensive information about the employee.
+
+  ![image](https://github.com/ManzCreations/ManzCreations-CRM/assets/128404387/7799cad2-23f0-4122-95a2-eee3fa11ce1e)
+
+- **Assign Employees to Job Orders:** From an employee's card, users can assign employees to current job orders, facilitating efficient resource allocation.
+
+  ![image](https://github.com/ManzCreations/ManzCreations-CRM/assets/128404387/57285855-6415-46d8-9540-6179c162f6b8)
+
+### Client Side
+
+The Client Side offers robust tools for managing client interactions and job orders:
+
+- **Add Companies:** Users can add new client companies into the system, making it easier to manage multiple corporate relationships.
+
+  ![image](https://github.com/ManzCreations/ManzCreations-CRM/assets/128404387/b9fb2982-5b1c-4029-a636-f59cca08ab79)
+
+- **Manage Job Orders:** Attach job orders to companies and oversee these orders to ensure timely completion and satisfaction.
+
+  ![image](https://github.com/ManzCreations/ManzCreations-CRM/assets/128404387/6e7d23bc-9a07-4995-a6ad-dbe59379bba7)
+
+- **Company and Job Order Management:** Navigate through companies and their respective job orders from this region, streamlining the management process.
+
+  ![image](https://github.com/ManzCreations/ManzCreations-CRM/assets/128404387/4c90026a-2289-47e1-b528-fdd413a4abd5)
+
+## Upcoming Features
+
+### Automation
+
+In the near future, ManzCreations-CRM will introduce automation features to further enhance your operational efficiency:
+
+- **Timing of Employee Placement and Job Order Creation:** Automate the scheduling and creation process based on predefined criteria.
+
+- **Suggestions Based on Time Data Events:** Receive recommendations for optimal employee placements and job order scheduling based on historical data and patterns.
+
+Stay tuned for updates on these exciting features!
+
 ## Contributing
 
 Contributions to ManzCreations CRM are welcome! Please refer to CONTRIBUTING.md for guidelines on how to contribute to this project.
