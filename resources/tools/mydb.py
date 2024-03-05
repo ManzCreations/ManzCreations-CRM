@@ -63,8 +63,8 @@ def load_json_file(file_path: Path = CONFIG_PATH, file_type: str = "JSON file", 
         if not skip_error_dlg:
             showCriticalMessage("File Not Found Error", f"{file_type} not found.")
         return None
-    except json.JSONDecodeError:
-        showCriticalMessage("JSON Decode Error", f"Error decoding {file_type}.")
+    except json.JSONDecodeError as e:
+        showCriticalMessage("JSON Decode Error", f"Error decoding {file_type}: {e}")
         return None
 
 

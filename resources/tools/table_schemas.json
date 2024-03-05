@@ -10,7 +10,7 @@
     "    last_name VARCHAR(100) NOT NULL,",
     "    email VARCHAR(100) NOT NULL,",
     "    phone VARCHAR(25) NOT NULL,",
-    "    preferred_contact_method ENUM('Phone', 'Email') NULL,"
+    "    preferred_contact_method ENUM('Phone', 'Email') NULL,",
     "    address VARCHAR(100) NOT NULL,",
     "    city VARCHAR(25) NOT NULL,",
     "    state VARCHAR(25) NOT NULL,",
