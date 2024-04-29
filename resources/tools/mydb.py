@@ -90,7 +90,8 @@ def create_db_connection(config_path: Path = CONFIG_PATH) -> Optional[MySQLConne
             host=config['host'],
             user=config['user'],
             password=config['password'],
-            database=config['database']
+            database=config['database'],
+            auth_plugin='mysql_native_password'
         )
         print("MySQL Database connection successful")
         return connection

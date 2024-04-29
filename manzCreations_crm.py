@@ -1,4 +1,5 @@
 import locale
+import subprocess
 from datetime import timedelta
 
 from PyQt5.QtCore import QSize
