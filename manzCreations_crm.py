@@ -5,11 +5,6 @@ from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QFont, QIcon
 from PyQt5.QtWidgets import *
 
-from resources.tools import decrypt_files
-
-# Before doing anything, decrypt necessary files
-decrypt_files()
-
 # Import application specific files
 from application.external_widgets import *
 from application.finder_agent import *
@@ -19,18 +14,10 @@ from resources.tools import *
 locale.setlocale(locale.LC_ALL, '')  # Set to the user's default locale
 
 ###################################
-# TODO
-
-###################################
-
-###################################
 # Column Headers
 
 # Determine if the application is a frozen executable or a script
-if getattr(sys, 'frozen', False):
-    application_path = sys._MEIPASS
-else:
-    application_path = os.path.dirname(os.path.abspath(__file__))
+application_path = str(resource_path(Path.cwd()))
 
 # Example of how to use application_path to build a path to resources
 column_data_path = Path(application_path, 'resources', 'tools', 'column_data.json')
@@ -445,7 +432,8 @@ class EmployeePage(QWidget):
     def exportToExcel(self):
         try:
             # Directory where the Excel files will be saved
-            export_dir = "exported_tables"
+            out_dir = find_output_directory()
+            export_dir = Path(out_dir, "exported_tables")
             os.makedirs(export_dir, exist_ok=True)  # Create the directory if it doesn't exist
 
             # Prepare data for export
@@ -464,7 +452,7 @@ class EmployeePage(QWidget):
             # Naming strategy: "employees_" + current date
             current_date = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
             file_name = f"employees_{current_date}.xlsx"
-            file_path = os.path.join(export_dir, file_name)
+            file_path = os.path.join(resource_path(export_dir), file_name)
 
             # Export to Excel
             df.to_excel(file_path, index=False)
@@ -923,7 +911,8 @@ class ClientPage(QWidget):
     def exportToExcel(self):
         try:
             # Directory where the Excel files will be saved
-            export_dir = "exported_tables"
+            out_dir = find_output_directory()
+            export_dir = Path(out_dir, "exported_tables")
             os.makedirs(export_dir, exist_ok=True)  # Create the directory if it doesn't exist
 
             # Prepare data for export
@@ -1297,7 +1286,8 @@ class CurrentJobOrdersPage(QWidget):
     def exportToExcel(self):
         try:
             # Directory where the Excel files will be saved
-            export_dir = "exported_tables"
+            out_dir = find_output_directory()
+            export_dir = Path(out_dir, "exported_tables")
             os.makedirs(export_dir, exist_ok=True)  # Create the directory if it doesn't exist
 
             # Prepare data for export
@@ -1571,7 +1561,8 @@ class OldJobOrdersPage(QWidget):
     def exportToExcel(self):
         try:
             # Directory where the Excel files will be saved
-            export_dir = "exported_tables"
+            out_dir = find_output_directory()
+            export_dir = Path(out_dir, "exported_tables")
             os.makedirs(export_dir, exist_ok=True)  # Create the directory if it doesn't exist
 
             # Prepare data for export

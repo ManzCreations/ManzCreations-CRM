@@ -4,12 +4,13 @@ from pathlib import Path
 
 from PyQt5.QtWidgets import QApplication, QDialog, QVBoxLayout, QLabel, QLineEdit, QPushButton, QFileDialog, QHBoxLayout
 
-from .helpful_functions import get_application_path
+from .helpful_functions import resource_path
 
 DECRYPTION_KEY_LOCATION = Path("path_to_some_persistent_storage.json")  # Update this path accordingly
 
 # Determine if the application is a frozen executable or a script
-application_path = get_application_path()
+# application_path = get_application_path()
+application_path = str(resource_path(Path.cwd()))
 
 # Read the stylesheet content
 stylesheet_path = Path(application_path, 'resources', 'style_properties', 'stylesheet.qss')

@@ -12,32 +12,68 @@ from PyQt5.QtWidgets import QMessageBox
 from .mydb import execute_query
 
 
-def get_application_path():
-    # Determine if the application is a frozen executable or a script
-    if getattr(sys, 'frozen', False):
-        exe_path = Path(sys.executable).parent
-    else:
-        # If running as a script, go up two levels from the script's location to reach the project root
-        return Path(os.path.dirname(os.path.abspath(__file__))).parent.parent
-
-    # Construct the path to the JSON file based on the exe location
-    json_path = exe_path / 'path_to_some_persistent_storage.json'
-
-    # Attempt to read the JSON file
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
     try:
-        with open(json_path, 'r') as file:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS2
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
+
+
+application_path = str(resource_path(Path.cwd()))
+
+
+def find_output_directory():
+    # Check if local_directories.json file exists
+    local_dir_path = resource_path("local_directories.json")
+    if os.path.exists(local_dir_path):
+        with open(local_dir_path, "r") as file:
             data = json.load(file)
-            # Assuming 'start_paths' is a list and you're interested in the first item
-            start_path = Path(data['start_paths'][0])
-            # Use the parent of the start_path as the application path
-            return start_path.parent
-    except Exception as e:
-        print(f"Error reading or processing the JSON file: {e}")
-        # Fallback to the exe_path if there's an issue
-        return exe_path
+            output_directory = data.get("outputs", None)
+            if output_directory:
+                return output_directory
+
+    # If local_directories.json does not exist or outputs key is not found, create it and prompt user
+    dialog = QDialog()
+    dialog.setWindowTitle("Output Directory Selection")
+    dialog.setFixedSize(400, 150)
+
+    layout = QVBoxLayout()
+
+    label = QLabel("Please select the output directory:")
+    layout.addWidget(label)
+
+    output_dir_button = QPushButton("Browse")
+    output_dir_button.clicked.connect(lambda: browse_output_directory(dialog))
+    layout.addWidget(output_dir_button)
+
+    ok_button = QPushButton("OK")
+    ok_button.clicked.connect(dialog.accept)
+    layout.addWidget(ok_button)
+
+    dialog.setLayout(layout)
+
+    dialog.exec_()
+
+    # Get selected directory path
+    output_directory = dialog.property("outputDirectory")
+    if output_directory:
+        # Save output directory to local_directories.json
+        with open(local_dir_path, "w") as file:
+            data = {"outputs": output_directory}
+            json.dump(data, file)
+        return output_directory
+
+    return None
 
 
-application_path = get_application_path()
+def browse_output_directory(dialog):
+    output_directory = QFileDialog.getExistingDirectory(dialog, "Select Output Directory")
+    if output_directory:
+        dialog.setProperty("outputDirectory", output_directory)
 
 
 def show_error_message(message: str) -> None:
