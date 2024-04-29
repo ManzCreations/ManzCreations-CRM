@@ -4,10 +4,11 @@ import sys
 import tempfile
 from pathlib import Path
 from typing import Dict, List
+import json
 
 import docx
 import fitz  # PyMuPDF
-from PyQt5.QtWidgets import QMessageBox
+from PyQt5.QtWidgets import *
 
 from .mydb import execute_query
 
@@ -39,16 +40,27 @@ def find_output_directory():
     # If local_directories.json does not exist or outputs key is not found, create it and prompt user
     dialog = QDialog()
     dialog.setWindowTitle("Output Directory Selection")
-    dialog.setFixedSize(400, 150)
+    dialog.setFixedSize(400, 200)
 
     layout = QVBoxLayout()
 
-    label = QLabel("Please select the output directory:")
+    label = QLabel(f"This will serve as a one-time selection of the directory that will hold all output files.\n"
+                   f"If you would like to change the output directory at any time, simply go to\n"
+                   f"{local_dir_path} and open the JSON file, then modify the value within the 'outputs' section.")
+    label.setWordWrap(True)
     layout.addWidget(label)
 
+    directory_layout = QHBoxLayout()
+    output_dir_edit = QLineEdit()
+    output_dir_edit.setPlaceholderText("Enter output directory path")
+    output_dir_edit.setStyleSheet("QLineEdit::placeholder { color: lightgray; }")
+    directory_layout.addWidget(output_dir_edit)
+
     output_dir_button = QPushButton("Browse")
-    output_dir_button.clicked.connect(lambda: browse_output_directory(dialog))
-    layout.addWidget(output_dir_button)
+    output_dir_button.clicked.connect(lambda: browse_output_directory(dialog, output_dir_edit))
+    directory_layout.addWidget(output_dir_button)
+
+    layout.addLayout(directory_layout)
 
     ok_button = QPushButton("OK")
     ok_button.clicked.connect(dialog.accept)
@@ -56,24 +68,23 @@ def find_output_directory():
 
     dialog.setLayout(layout)
 
-    dialog.exec_()
-
-    # Get selected directory path
-    output_directory = dialog.property("outputDirectory")
-    if output_directory:
-        # Save output directory to local_directories.json
-        with open(local_dir_path, "w") as file:
-            data = {"outputs": output_directory}
-            json.dump(data, file)
-        return output_directory
+    if dialog.exec_() == QDialog.Accepted:
+        # Get selected directory path
+        output_directory = output_dir_edit.text()
+        if output_directory:
+            # Save output directory to local_directories.json
+            with open(local_dir_path, "w") as file:
+                data = {"outputs": output_directory}
+                json.dump(data, file)
+            return output_directory
 
     return None
 
 
-def browse_output_directory(dialog):
-    output_directory = QFileDialog.getExistingDirectory(dialog, "Select Output Directory")
-    if output_directory:
-        dialog.setProperty("outputDirectory", output_directory)
+def browse_output_directory(dialog, output_dir_edit):
+    directory = QFileDialog.getExistingDirectory(dialog, "Select Output Directory")
+    if directory:
+        output_dir_edit.setText(directory)
 
 
 def show_error_message(message: str) -> None:

@@ -10,7 +10,7 @@ from PyQt5.QtWidgets import *
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
-from resources.tools import resource_path, read_text_file, execute_query
+from resources.tools import resource_path, read_text_file, execute_query, find_output_directory
 
 application_path = str(resource_path(Path.cwd()))
 

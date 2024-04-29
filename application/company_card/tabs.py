@@ -9,7 +9,7 @@ from PyQt5.QtGui import QFontMetrics, QFont, QIcon
 from PyQt5.QtWidgets import *
 
 from application.job_order_card import JobOrderCard
-from resources.tools import resource_path, load_json_file, execute_query
+from resources.tools import resource_path, load_json_file, execute_query, find_output_directory
 from .dialogs import EditCompanyDialog, AddFieldDialog
 
 application_path = str(resource_path(Path.cwd()))

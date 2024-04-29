@@ -5,7 +5,7 @@ from PyQt5.QtCore import QRegExp, QDate, QPoint, Qt
 from PyQt5.QtGui import QRegExpValidator, QKeyEvent, QIcon
 from PyQt5.QtWidgets import *
 
-from resources.tools import resource_path, read_text_file, execute_query
+from resources.tools import resource_path, read_text_file, execute_query, find_output_directory
 
 application_path = str(resource_path(Path.cwd()))
 

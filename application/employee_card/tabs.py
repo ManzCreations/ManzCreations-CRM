@@ -11,7 +11,7 @@ from PyQt5.QtWidgets import *
 from application.company_card import ClientCard
 from application.job_order_card import JobOrderCard
 from resources.tools import resource_path, archive_and_delete_employee_job_order, retrieve_current_job_order, \
-    change_active_needed_employees, read_text_file, load_json_file, execute_query
+    change_active_needed_employees, read_text_file, load_json_file, execute_query, find_output_directory
 from .dialogs import EditEmployeeDialog, AddFieldDialog, ManageJobOrderDialog
 
 application_path = str(resource_path(Path.cwd()))

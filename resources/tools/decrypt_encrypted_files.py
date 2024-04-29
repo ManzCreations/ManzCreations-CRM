@@ -2,7 +2,7 @@ import json
 import os
 from pathlib import Path
 
-from PyQt5.QtWidgets import QApplication, QDialog, QVBoxLayout, QLabel, QLineEdit, QPushButton, QFileDialog, QHBoxLayout
+from PyQt5.QtWidgets import *
 
 from .helpful_functions import resource_path
 
